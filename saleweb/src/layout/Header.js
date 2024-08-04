@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import APIs, { endpoints } from "../configs/APIs";
 import {
+  Badge,
   Button,
   Container,
   Form,
@@ -10,12 +11,13 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { MyDispatchContext, MyUserContext } from "../App";
+import { MyCartContext, MyDispatchContext, MyUserContext } from "../App";
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
   const [q, setQ] = useState("");
   const nav = useNavigate();
+  const [cartCounter, ] = useContext(MyCartContext);
 
   const user = useContext(MyUserContext);
   const dispatch = useContext(MyDispatchContext);
@@ -72,7 +74,7 @@ const Header = () => {
               ) : (
                 <>
                   <Link className="nav-link text-success" to="/login">
-                    {/* <Image src={user.avatar} width="25" roundedCircle /> */}
+                    <Image src={user.avatar} width="25" roundedCircle />
                     Chào{user.username}
                   </Link>
                   <Button
@@ -83,6 +85,10 @@ const Header = () => {
                   </Button>
                 </>
               )}
+              <Link className="nav-link text-success" to="/cart">
+              &#128640; Giỏ hàng <Badge className="bg bg-danger">{cartCounter}</Badge>
+                  </Link>
+              
             </Nav>
             <Form onSubmit={search} className="d-flex">
               <Form.Control

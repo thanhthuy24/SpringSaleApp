@@ -7,27 +7,51 @@ import { Container } from "react-bootstrap";
 import Login from "./components/Login";
 import { createContext, useReducer } from "react";
 import MyUserReducer from "./reducers/MyUserReducer";
+import Register from "./components/Register";
+import Cart from "./components/Cart";
+import MyCartReducer from "./reducers/MyCartReducer";
+import cookie from "react-cookies";
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
+export const MyCartContext = createContext();
+
+const count = () => {
+  let cart = cookie.load("cart") || null;
+  if (cart !== null) {
+    let totalQuantity = 0;
+    for (let c of Object.values(cart)) totalQuantity += c.quantity;
+
+    return totalQuantity;
+  }
+  return 0;
+};
 
 const App = () => {
-  const [user, dispatch] = useReducer(MyUserReducer, null);
+  const [user, dispatch] = useReducer(
+    MyUserReducer,
+    cookie.load("user") || null
+  );
+  const [cartCounter, cartDispatch] = useReducer(MyCartReducer, count());
 
   return (
-    <MyUserContext.Provider value={user}>
-      <MyDispatchContext.Provider value={dispatch}>
-        <BrowserRouter>
-          <Header />
-          <Container>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </Container>
-        </BrowserRouter>
-      </MyDispatchContext.Provider>
-    </MyUserContext.Provider>
+    <BrowserRouter>
+      <MyUserContext.Provider value={user}>
+        <MyDispatchContext.Provider value={dispatch}>
+          <MyCartContext.Provider value={[cartCounter, cartDispatch]}>
+            <Header />
+            <Container>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/cart" element={<Cart />} />
+              </Routes>
+            </Container>
+          </MyCartContext.Provider>
+        </MyDispatchContext.Provider>
+      </MyUserContext.Provider>
+    </BrowserRouter>
   );
 };
 

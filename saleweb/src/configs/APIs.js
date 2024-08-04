@@ -7,7 +7,9 @@ export const endpoints = {
     "categories": "/categories",
     "products": "/products",
     "login": "/login",
-    "current-user": "/current-user"
+    "current-user": "/current-user",
+    "register": "/users",
+    "pay": "/pay"
 }
 
 export const authAPIs = () => {
