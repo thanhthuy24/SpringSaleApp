@@ -6,32 +6,32 @@ package com.htt.configs;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-
 /**
  *
  * @author Admin
  */
-public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer{
+public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {
-          HibernateConfigs.class,
-          TilesConfigs.class,
-          SecurityConfigs.class
+        return new Class[]{
+            HibernateConfigs.class,
+            TilesConfigs.class,
+            SecurityConfigs.class,
+            JwtSecurityConfig.class
         };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {
+        return new Class[]{
             WebAppContextConfigs.class
         };
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] {"/"};
+        return new String[]{"/"};
     }
-    
+
 }

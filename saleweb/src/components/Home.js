@@ -13,6 +13,11 @@ const Home = () => {
     let cateId = q.get("cateId");
     if(cateId !== null)
         url = `${url}?cateId=${cateId}`;
+    else {
+      let k = q.get("kw");
+      if (k != null)
+        url = `${url}?q=${k}`;
+    }
 
     let res = await APIs.get(url);
     setProducts(res.data);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,8 +29,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
     "com.htt.controllers",
     "com.htt.repository",
-    "com.htt.service"
+    "com.htt.service",
+    "com.htt.components",
 })
+@Order(2)
 public class SecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -43,30 +46,22 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password");
-        
-        http.formLogin().defaultSuccessUrl("/")
-                .failureUrl("/login?error");
+    protected void configure(HttpSecurity http)
+            throws Exception {
+        http.formLogin().usernameParameter("username").passwordParameter("password");
+        http.formLogin().defaultSuccessUrl("/").failureUrl("/login?error");
         
         http.logout().logoutSuccessUrl("/login");
         
-        http.exceptionHandling()
-                .accessDeniedPage("/login?accessDenied");
+        http.exceptionHandling().accessDeniedPage("/login?accessDenied");
         
-        http.authorizeRequests().antMatchers("/api/categories").permitAll()
-                .antMatchers("/api/products").permitAll()
-                .antMatchers("/**")
-                .access("hasRole('ROLE_ADMIN')");
-//        .antMatchers("/**/pay")
-//                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+        http.authorizeRequests().antMatchers("/api/**").permitAll()
+                .antMatchers("/**").hasRole("ADMIN");
+        
         http.csrf().disable();
     }
     

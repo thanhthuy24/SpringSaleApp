@@ -14,7 +14,7 @@
         <title>Trang chủ</title>
     </head>
     <body>
-        <h1 class="text-center text-primary mt-1">DANH MỤC SẢN PHẨM</h1>
+        <h1 class="text-center text-primary mt-1" >DANH MỤC SẢN PHẨM</h1>
         
         <div class="row">
             <div class="col-md-3 col-12 bg-secondary">
